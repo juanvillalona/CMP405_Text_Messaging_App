@@ -30,23 +30,26 @@ import javax.swing.border.TitledBorder;
 
 public class Driver {
 
-	private static LinkedList <InetSocketAddress> addresses = new LinkedList<InetSocketAddress>();
+	private static LinkedList<InetAddress> addresses = new LinkedList<InetAddress>();
+	private static LinkedList<messageWindow> windows = new LinkedList<messageWindow>();
 	
 	public static void main(String[] args) {
-		messageWindow c1 = new messageWindow("hi", "hello");
-		c1.initializeWindow();
+		//messageWindow c1 = new messageWindow(teacherAddress, "hello", false);
+		//c1.initializeWindow();
 		
 		
 		Socket socket = new Socket(64000);
 		
 		InetAddress myAddress = null;
 		//byte[] teacherAddress = new byte[]{192, 168, 1, 115};
-		//InetAddress teacherAddress = null;
-//		try {
-//			//teacherAddress = InetAddress.getByName("192.168.1.115");
-//		} catch (UnknownHostException e1) {
-//			e1.printStackTrace();
-//		}
+		InetAddress teacherAddress = null;
+		InetAddress anotherAddress = null;
+		try {
+			teacherAddress = InetAddress.getByName("192.168.1.115");
+			anotherAddress = InetAddress.getByName("201.252.12.11");
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			myAddress = InetAddress.getLocalHost();
@@ -74,26 +77,58 @@ public class Driver {
 			System.exit(-1);
 		} 
 		
+		addresses.add(teacherAddress);
+		addresses.add(myAddress);
+		addresses.add(anotherAddress);
+
+		
 		DatagramPacket packet;
+
 		
 		do {
 			packet = socket.receive();
 			if (packet != null) {
+				
+				
+
 				String message = new String(packet.getData());
 				//textArea.append("Message = " + message + "\n");
 //				System.out.println(packet.getSocketAddress());
 //				System.out.println(packet.getSocketAddress().getClass());
-				InetSocketAddress thing = (InetSocketAddress) packet.getSocketAddress();
+				InetAddress thingy = myAddress;
 				
-				Iterator iterator = addresses.iterator();
-				while (iterator.hasNext()) {
-					if(thing == iterator.next()) {
-						System.out.println("im here");
+				int i = 0;
+				while( i < windows.size()) {
+					
+				if (thingy == windows.get(i).getIP() && windows.get(i).isActive() == false){
+					System.out.println("yeds im here, but not active");
+					System.out.println(windows.get(i).isActive());
+
+					windows.get(i).toggleActive();
+					System.out.println(windows.get(i).getIP());
+					System.out.println(windows.get(i).isActive());
+					//windows.get(i).initializeWindow();
+					break;
+					} else {
 					}
-					else {
-						System.out.println("Im not here");
-					}
+					i++;
 				}
+				
+//				Iterator Iterator = addresses.iterator();
+//				while(Iterator.hasNext()) {
+//					if(Iterator.hasNext()) {
+//					System.out.println(Iterator.next());
+//					}
+//				}
+				
+				
+//				for(InetAddress thing : addresses) {
+//					if(thingy != thing) {
+//						System.out.println("I'm here!");
+//					} else {
+//						System.out.println("I'm not here");
+//					}
+//				}
 				
 			}
 		} while(packet != null);

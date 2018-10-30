@@ -32,20 +32,36 @@ public class messageWindow {
 	Button send1, cancel;
 	JTextArea textArea;
 	
-	String IP, port;
+	InetAddress IP, port;
+	boolean active;
 	
 	
 	
-	public messageWindow(String IP, String port) {
+	public messageWindow(InetAddress IP, InetAddress port, boolean active) {
 		this.IP = IP;
 		this.port = port;
+		this.active = active;
+	}
+	
+	public boolean isActive() {
+		return active;
+	}
+	
+	public void toggleActive() {
+		if(active == true) {
+			active = false;
+		} else {
+			active = true;
+		}
+	}
+	
+	public InetAddress getIP() {
+		return IP;
 	}
 	
 	public void initializeWindow(){
 	 
-	
-		
-	frame = new JFrame(IP);
+	frame = new JFrame(IP.toString());
 	frame.setLayout(new GridLayout(0,1));
 	frame.setSize(700, 500);
 	frame.setLocation(300, 300);
@@ -55,7 +71,7 @@ public class messageWindow {
 	mPanel.setLayout(new BoxLayout(mPanel, BoxLayout.Y_AXIS));
 	mPanel.setSize(200,200);
 	
-	final String title = "Messaging Title";
+	final String title = IP.toString();
 	TitledBorder border = new TitledBorder(title);
 	border.setTitleJustification(TitledBorder.CENTER);
 	border.setTitlePosition(TitledBorder.TOP);
@@ -99,6 +115,7 @@ public class messageWindow {
 	
 	close.addActionListener(new java.awt.event.ActionListener () {
 		public void actionPerformed(java.awt.event.ActionEvent evt) {
+			active = false;
 			System.exit(0);
 		}
 	});
