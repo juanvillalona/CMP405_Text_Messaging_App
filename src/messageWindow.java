@@ -32,8 +32,18 @@ public class messageWindow {
 	Button send1, cancel;
 	JTextArea textArea;
 	
+	String message;
+	
 	InetAddress IP, port;
 	boolean active;
+	
+	public void writeMessage(boolean me, boolean them, String message) {
+		if(me == true) {
+			mLabel.setText(mLabel.getText() + "</br> Me: " + message);
+		} else {
+			mLabel.setText(mLabel.getText() + "</br> Them: " + message);
+		}
+	}
 	
 	
 	
@@ -111,6 +121,39 @@ public class messageWindow {
 	btnPanel = new JPanel();
 	Button send = new Button("Send");
 	Button close = new Button("Cancel");
+	
+	send.addActionListener(new java.awt.event.ActionListener () {
+		public void actionPerformed(java.awt.event.ActionEvent evt) {
+			
+			
+				Socket socket = new Socket(64000);
+				
+				InetAddress myAddress = null;
+				InetAddress teacherAddress = null;
+//				try {
+//					teacherAddress = InetAddress.getByName("192.168.1.101");
+//				} catch (UnknownHostException e1) {
+//					e1.printStackTrace();
+//				}
+				
+				message = textArea.getText().toString();
+				
+				try {
+					myAddress = InetAddress.getLocalHost();
+					//System.out.println(myAddress);
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.exit(-1);
+				}
+				
+				socket.send(message, teacherAddress, 64000);
+				
+				writeMessage(true, false, message);
+
+				
+			
+		}
+	}); 
 
 	
 	close.addActionListener(new java.awt.event.ActionListener () {
