@@ -74,14 +74,16 @@ public class Driver {
 			System.exit(-1);
 		}
 		
-		messageWindow c1 = new messageWindow(myAddress, myAddress, true);
-		c1.initializeWindow();
+	
 		
 		//messageWindow c1 = new messageWindow(teacherAddress, "hello", false);
 		//c1.initializeWindow();
 		
 		
 		Socket socket = new Socket(64000);
+		
+		messageWindow c1 = new messageWindow(myAddress, myAddress, socket, true);
+		c1.initializeWindow();
 
 //		InetAddress myAddress = null;
 //		//byte[] teacherAddress = new byte[]{192, 168, 1, 115};

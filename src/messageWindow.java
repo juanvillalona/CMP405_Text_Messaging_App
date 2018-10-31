@@ -35,6 +35,7 @@ public class messageWindow {
 	String message;
 	
 	InetAddress IP, port;
+	Socket socket;
 	boolean active;
 	
 	public void writeMessage(boolean me, boolean them, String message) {
@@ -47,10 +48,11 @@ public class messageWindow {
 	
 	
 	
-	public messageWindow(InetAddress IP, InetAddress port, boolean active) {
+	public messageWindow(InetAddress IP, InetAddress port,Socket socket, boolean active) {
 		this.IP = IP;
 		this.port = port;
 		this.active = active;
+		this.socket = socket;
 	}
 	
 	public boolean isActive() {
@@ -126,15 +128,14 @@ public class messageWindow {
 		public void actionPerformed(java.awt.event.ActionEvent evt) {
 			
 			
-				Socket socket = new Socket(64000);
 				
 				InetAddress myAddress = null;
 				InetAddress teacherAddress = null;
-//				try {
-//					teacherAddress = InetAddress.getByName("192.168.1.101");
-//				} catch (UnknownHostException e1) {
-//					e1.printStackTrace();
-//				}
+			try {
+					teacherAddress = InetAddress.getByName("192.168.1.101");
+			} catch (UnknownHostException e1) {
+				e1.printStackTrace();
+			}
 				
 				message = textArea.getText().toString();
 				
