@@ -24,7 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
-public class messageWindow {
+public class MessageWindow {
 	
 	JFrame frame;
 	JPanel mPanel, tPanel, btnPanel;
@@ -36,19 +36,24 @@ public class messageWindow {
 	
 	InetAddress IP, port;
 	Socket socket;
+	DatagramPacket packet;
 	boolean active;
 	
 	public void writeMessage(boolean me, boolean them, String message) {
 		if(me == true) {
-			mLabel.setText(mLabel.getText() + "</br> Me: " + message);
+			mLabel.setText(mLabel.getText() + "Me: " + message + "</br>");
 		} else {
-			mLabel.setText(mLabel.getText() + "</br> Them: " + message);
+			mLabel.setText(mLabel.getText() + "Them: " + message + "</br>");
 		}
 	}
 	
+	public InetAddress getIPAddress() {
+		return IP;
+	}
 	
+
 	
-	public messageWindow(InetAddress IP, InetAddress port,Socket socket, boolean active) {
+	public MessageWindow(InetAddress IP,InetAddress port,Socket socket, boolean active) throws UnknownHostException {
 		this.IP = IP;
 		this.port = port;
 		this.active = active;
@@ -147,7 +152,7 @@ public class messageWindow {
 					System.exit(-1);
 				}
 				
-				socket.send(message, teacherAddress, 64000);
+				socket.send(message, IP, 64000);
 				
 				writeMessage(true, false, message);
 
@@ -173,5 +178,7 @@ public class messageWindow {
 	
 	frame.setVisible(true);
 }
+	
+	
 }
 

@@ -29,41 +29,26 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 public class Driver {
-
-	private static LinkedList<InetAddress> addresses = new LinkedList<InetAddress>();
-	private static LinkedList<messageWindow> windows = new LinkedList<messageWindow>();
 	
-//	public void sendMessage(messageWindow m, String message) {
-//		Socket socket = new Socket(64000);
-//		
-//		InetAddress myAddress = null;
-//		InetAddress teacherAddress = null;
-//		try {
-//			teacherAddress = InetAddress.getByName("196.168.1.10");
-//		} catch (UnknownHostException e1) {
-//			e1.printStackTrace();
-//		}
-//		
-//		try {
-//			myAddress = InetAddress.getLocalHost();
-//			//System.out.println(myAddress);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//			System.exit(-1);
-//		}
-//		
-//		socket.send(message, teacherAddress, 64000);
-//		
-//		m.writeMessage(true, false, message);
-//
-//		
-//	}
-//	
-	public static void getMessage(messageWindow m, String message) {
+	static LinkedList <MessageWindow> windows = new LinkedList<MessageWindow>();
+
+	public static void getMessage(MessageWindow m, String message) {
 		m.writeMessage(false, true, message);
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UnknownHostException {
+		Socket socket = new Socket(64000);
+
+		
+		LookUpWindow c = new LookUpWindow(socket);
+		
+		
+		
+		InetAddress teachAddress = null;
+		
+		teachAddress = InetAddress.getByName("192.168.1.113");
+		
+				
 		
 		InetAddress myAddress = null;
 		try {
@@ -76,14 +61,14 @@ public class Driver {
 		
 	
 		
-		//messageWindow c1 = new messageWindow(teacherAddress, "hello", false);
+		//MessageWindow c1 = new MessageWindow(teachAddress, socket, false);
 		//c1.initializeWindow();
 		
 		
-		Socket socket = new Socket(64000);
+	
 		
-		messageWindow c1 = new messageWindow(myAddress, myAddress, socket, true);
-		c1.initializeWindow();
+		//MessageWindow c1 = new MessageWindow(myAddress, myAddress, socket, true);
+		//c1.initializeWindow();
 
 //		InetAddress myAddress = null;
 //		//byte[] teacherAddress = new byte[]{192, 168, 1, 115};
@@ -113,6 +98,8 @@ public class Driver {
 //		
 //		//socket.send("juanV says OLA!", teacherAddress, 64000);
 //		//System.out.println(teacherAddress);
+		
+		
 	try {
 		System.out.println("Main is sleeping");
 		TimeUnit.SECONDS.sleep(5);
@@ -123,36 +110,38 @@ public class Driver {
 		}
 	
 	System.out.println("my address is: " + myAddress.getHostAddress() );
-
-		
-//		addresses.add(teacherAddress);
-//		addresses.add(myAddress);
-//		addresses.add(anotherAddress);
-//
-//		
+	
 		DatagramPacket packet;
-
+		String message;
 		
 		do {
 			packet = socket.receive();
 			if (packet != null) {
-				
-				String message = new String(packet.getData());
-				
-				getMessage(c1, message);
-			}
+				LinkedList<MessageWindow> windows = c.getWindows();
+				for (MessageWindow temp : windows) {
+				    if(temp.getIP() == packet.getAddress()) {
+				    	System.out.println("im here");
+				    	temp.writeMessage(false, true, packet.getData().toString());
+				    }
+				    else {
+				    	System.out.println("not here");
+				    }
+				}
 				
 			
-					
+					System.out.println(packet.getData());
 				
 				
 			
+		}
 		}while(packet != null);
 		
 		System.out.println("That's it folks!");
 	
 
-}
+			
+		
+	}
 }
 
 
